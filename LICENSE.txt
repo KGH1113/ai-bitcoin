@@ -1,0 +1,5 @@
+# License
+
+All rights reserved.  
+You may not use, distribute, or modify this code without explicit permission from the author.  
+Contact Guhyeon Kang at gangguhyeon1113@gmail.com for permissions or inquiries.
