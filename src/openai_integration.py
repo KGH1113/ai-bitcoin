@@ -26,6 +26,7 @@ def get_trade_decision(
   news_data: str,
   current_krw_balance: int,
   current_btc_balance: int,
+  fear_greed_index: str,
 ):
   prompt = fill_prompt(
     trade_decision_prompt_raw,
@@ -33,7 +34,8 @@ def get_trade_decision(
     PAST_TRADING_DATA=past_trading_data,
     CURRENT_KRW_BALANCE=str(current_krw_balance),
     CURRENT_BTC_BALANCE=str(current_btc_balance),
-    NEWS=news_data
+    NEWS=news_data,
+    FEAR_GREED_INDEX=fear_greed_index
   )
 
   response = client.chat.completions.create(

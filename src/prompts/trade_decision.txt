@@ -21,3 +21,5 @@ You are an expert in Bitcoin investing. Tell me whether to buy, sell or hold and
 [PAST_TRADING_DATA]
 ### Recent 10 news about "Stock Market Bitcoin"
 [NEWS]
+### Today's Fear Greed Index
+[FEAR_GREED_INDEX]

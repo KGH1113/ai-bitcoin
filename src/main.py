@@ -13,13 +13,15 @@ def main():
   btc_balance = upbit.get_btc_balance()
   news_data = json.dumps(data_collection.collect_news())
   past_trade_data = json.dumps(asyncio.run(db.get_past_trades(10)))
+  fear_greed_index = json.dumps(data_collection.get_fear_greed_index())
   
   trade = ai.get_trade_decision(
     chart_data=chart_data,
     past_trading_data=past_trade_data,
     current_krw_balance=krw_balance,
     current_btc_balance=btc_balance,
-    news_data=news_data
+    news_data=news_data,
+    fear_greed_index=fear_greed_index
   )
   try:
     decision = trade["decision"]
