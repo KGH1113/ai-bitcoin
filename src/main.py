@@ -15,6 +15,7 @@ def main():
   past_trade_data = json.dumps(asyncio.run(db.get_past_trades(10)))
   fear_greed_index = json.dumps(data_collection.get_fear_greed_index())
   
+  # Get the trading decision from the AI
   trade = ai.get_trade_decision(
     chart_data=chart_data,
     past_trading_data=past_trade_data,
@@ -31,6 +32,7 @@ def main():
     print("get_trade_decision: Error while reading AI's json response")
     print(trade)
 
+  # Get the reflection from the AI
   reflection = ai.get_reflection(
     trade_data=json.dumps(trade),
     past_trade_data=past_trade_data,
@@ -46,6 +48,7 @@ def main():
     print("get_reflection: Error while reading AI's json response")
     print(reflection)
 
+  # Record the trade in the database
   asyncio.run(
     db.record_trade(
       decision=decision,
@@ -59,6 +62,7 @@ def main():
     )
   )
 
+  # Execute the trade
   if decision == "BUY":
     upbit.buy_btc(amount)
   elif decision == "SELL":

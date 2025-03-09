@@ -13,12 +13,21 @@ reflection_prompt_raw = _read_file('reflection.txt')
 
 def fill_prompt(template_text: str, **kwargs) -> str:
   """
-  Replaces placeholders in the form [PLACEHOLDER] with the
-  provided values (kwargs).
-  
-  Example usage:
-    fill_prompt(trade_decision_prompt_raw, CHART_DATA="some chart data")
+  Replaces placeholders in the given template text with provided keyword argument values.
+
+  The function scans the template text for placeholders formatted as [key] and replaces each with
+  the corresponding string conversion of the value provided in kwargs. If a placeholder is not found
+  in the kwargs, it remains unchanged.
+
+  Args:
+    template_text (str): The text containing placeholders to be filled.
+    **kwargs: Arbitrary keyword arguments where the key corresponds to the placeholder label
+          (without brackets) and the value is the string to replace the placeholder.
+
+  Returns:
+    str: The updated text with all valid placeholders replaced by their respective values.
   """
+  
   prompt = template_text
   for key, value in kwargs.items():
     placeholder = f"[{key}]"

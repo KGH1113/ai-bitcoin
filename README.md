@@ -1,7 +1,7 @@
 # 📈 AI Bitcoin Trading Bot  
 
 ## Overview  
-AI Bitcoin is an automated trading bot that leverages AI-driven analysis and real-time market data to make trading decisions on Upbit. The bot integrates financial data collection, sentiment analysis, and AI-based trade execution to optimize Bitcoin trading performance.
+AI Bitcoin is an automated trading bot that leverages AI-driven analysis and real-time market data to make trading decisions on Upbit. The bot integrates financial data collection, sentiment analysis, and AI-based trade execution to optimize Bitcoin trading performance.  
 
 ---
 
@@ -9,7 +9,7 @@ AI Bitcoin is an automated trading bot that leverages AI-driven analysis and rea
 
 ✅ **AI-Powered Trade Decisions** – Uses OpenAI models to analyze market trends, news, and past trades for informed decision-making.  
 ✅ **Real-Time Data Collection** – Fetches Bitcoin price charts, order book data, and relevant financial news.  
-✅ **Automated Trading Execution** – Places buy/sell orders on Upbit based on AI recommendations.  
+✅ **Automated Trading Execution** – Places buy/sell/hold orders on Upbit based on AI recommendations.  
 ✅ **Trade Reflection & Strategy Optimization** – AI reviews past trades to improve future decision-making.  
 ✅ **Database Integration** – Logs trade history, AI insights, and market conditions for performance tracking.  
 
@@ -67,7 +67,7 @@ DATABASE_URL="file:path_to_your_database_file"
 ```
 
 5️⃣ **Set up the database using Prisma:**  
-If using Prisma for database management, push the schema to your SQLite database:  
+For database management, push the schema to your SQLite database:  
 ```sh
 prisma db push
 ```
@@ -89,8 +89,11 @@ The bot will:
 - Collect real-time market data  
 - Analyze historical trades  
 - Crawl news about bitcoin stock market  
+- Get data of past trades  
+- Get fear-greed index
 - Make trade decisions and execute buy/sell orders  
 - Record trades and AI-generated reflections in the database  
+- Execute the trade  
 
 ### Adjusting Trading Parameters  
 
@@ -103,18 +106,19 @@ Modify `src/openai_integration.py` to adjust AI model parameters, prompt enginee
 ```
 ai-bitcoin/
 │── prisma/
-│   ├── database.db           # SQLite database file  
-│   ├── schema.prisma         # Prisma schema definition  
+│   ├── database.db   # SQLite database file  
+│   ├── schema.prisma # Prisma schema definition  
 │
 │── src/
-│   ├── data_collection/      # Market data collection module  
+│   ├── data_collection/        # Market data collection module  
 │   │   ├── __init__.py  
-│   │   ├── news.py           # Bitcoin news data collection  
-│   │   ├── upbit_chart.py    # Upbit chart data fetching  
+│   │   ├── news.py             # Bitcoin news data collection  
+│   │   ├── upbit_chart.py      # Upbit chart data fetching  
+│   │   ├── fear_greed_index.py # Fear-greed index data fetching  
 │   │  
-│   ├── prompts/              # AI prompt templates  
+│   ├── prompts/               # AI prompt templates  
 │   │   ├── __init__.py  
-│   │   ├── reflection.txt    # AI trade reflection prompt  
+│   │   ├── reflection.txt     # AI trade reflection prompt  
 │   │   ├── trade_decision.txt # AI trade decision prompt  
 │   │  
 │   ├── openai_integration.py # AI model integration  
@@ -122,11 +126,11 @@ ai-bitcoin/
 │   ├── db_integration.py     # Trade history database interactions  
 │   ├── main.py               # Entry point for the trading bot  
 │
-│── venv/                     # Virtual environment directory  
-│── .env                       # Environment variables (API keys, config)  
-│── .gitignore                 # Git ignore file  
-│── README.md                  # Project documentation  
-│── requirements.txt           # Python dependencies  
+│── venv/            # Virtual environment directory  
+│── .env             # Environment variables (API keys, config)  
+│── .gitignore       # Git ignore file  
+│── README.md        # Project documentation  
+│── requirements.txt # Python dependencies  
 ```
 
 ---
