@@ -12,7 +12,7 @@ You are an expert in Bitcoin investing. Tell me whether to buy, sell or hold and
 [CURRENT_BTC_BALANCE]
 
 ## Transaction Fee
-0.05%
+[TRADE_FEE]%
 
 ## Data
 ### Chart Data

@@ -64,6 +64,7 @@ SERPAPI_API_KEY=your_serpapi_key
 UPBIT_ACCESS_KEY=your_upbit_access_key
 UPBIT_SECRET_KEY=your_upbit_secret_key
 DATABASE_URL="file:path_to_your_database_file"
+TRADE_FEE=percentage_of_upbit_btc_trade_fee
 ```
 
 5️⃣ **Set up the database using Prisma:**  

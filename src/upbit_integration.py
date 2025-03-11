@@ -8,6 +8,12 @@ upbit = pyupbit.Upbit(
   os.getenv("UPBIT_ACCESS_KEY"), os.getenv("UPBIT_SECRET_KEY")
 )
 
+try:
+  trade_fee_env = float(os.getenv("TRADE_FEE"))
+except:
+  raise Exception("Unexpected trade fee value in env variable")
+trade_fee = 1 - (trade_fee_env / 100)
+
 def get_krw_balance():
   """
   Retrieve the account balance in Korean Won (KRW) via the Upbit API.
@@ -49,11 +55,15 @@ def buy_btc(krw_ammount: float):
   Raises:
     Exception: If the provided amount is less than or equal to 5000 KRW, indicating that the minimum required amount is not met.
   """
-
-  if krw_ammount > 5000:
-    upbit.buy_market_order("KRW-BTC", krw_ammount*0.9995)
-  else:
+  if upbit.get_balance("KRW") < krw_ammount * trade_fee:
+    # Balance overed
+    raise Exception("BTC you want to buy is over the balance")
+  if krw_ammount * trade_fee < 5000:
+    # Minimum buy amount not satisfied
     raise Exception("Minimum buy ammount is 5000 KRW")
+  else:
+    # Success
+    upbit.buy_market_order("KRW-BTC", krw_ammount * trade_fee)
   
 def sell_btc(krw_ammount: float):
   """
@@ -72,10 +82,16 @@ def sell_btc(krw_ammount: float):
   """
   
   current_price = pyupbit.get_orderbook(ticker="KRW-BTC")["orderbook_units"][0]["ask_price"]
-  if krw_ammount * current_price > 5000:
-    upbit.sell_market_order("KRW-BTC", krw_ammount)
-  else:
+
+  if upbit.get_balance("KRW-BTC") * current_price < krw_ammount * trade_fee:
+    # Balance overed
+    raise Exception("BTC you want to sell is over the balance")
+  elif krw_ammount * trade_fee < 5000:
+    # Minimum sell amount not satisfied
     raise Exception("Minimum sell ammount is 5000 KRW")
+  else:
+    # Success
+    upbit.sell_market_order("KRW-BTC", (krw_ammount * trade_fee) / current_price)
 
 if __name__ == "__main__":
   print(get_btc_balance())

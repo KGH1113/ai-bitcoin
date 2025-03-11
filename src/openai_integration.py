@@ -37,6 +37,7 @@ def get_trade_decision(
   current_krw_balance: int,
   current_btc_balance: int,
   fear_greed_index: str,
+  trade_fee: float,
 ):
   """
   Get trading decision from AI based on provided market and account data.
@@ -54,6 +55,7 @@ def get_trade_decision(
     current_krw_balance (int): Current balance of KRW.
     current_btc_balance (int): Current balance of BTC.
     fear_greed_index (str): Current fear-greed index as a string.
+    trade_fee (fload): Trade fee of 
 
   Returns:
     dict: The trading decision parsed from the AI response.
@@ -71,7 +73,8 @@ def get_trade_decision(
     CURRENT_KRW_BALANCE=str(current_krw_balance),
     CURRENT_BTC_BALANCE=str(current_btc_balance),
     NEWS=news_data,
-    FEAR_GREED_INDEX=fear_greed_index
+    FEAR_GREED_INDEX=fear_greed_index,
+    TRADE_FEE=trade_fee,
   )
 
   # Call the AI model to get a trading decision
@@ -102,7 +105,8 @@ def get_trade_decision(
       past_trading_data=past_trading_data,
       news_data=news_data,
       current_krw_balance=current_krw_balance,
-      current_btc_balance=current_btc_balance
+      current_btc_balance=current_btc_balance,
+      TRADE_FEE=trade_fee,
     )
   return result
 
