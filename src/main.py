@@ -34,13 +34,6 @@ def main(test: False):
     fear_greed_index=fear_greed_index,
     trade_fee=trade_fee,
   )
-  try:
-    decision = trade["decision"]
-    reason = trade["reason"]
-    amount = trade["amount"]
-  except:
-    print("get_trade_decision: Error while reading AI's json response")
-    print(trade)
 
   # Get the reflection from the AI
   reflection = ai.get_reflection(
@@ -48,27 +41,18 @@ def main(test: False):
     past_trade_data=past_trade_data,
     current_market_data=chart_data
   )
-  try:
-    reflection_content = reflection["reflection"]
-    recommended_actions = reflection["recommended_actions"]
-    market_trends = reflection["market_trends"]
-    successes = reflection["insights"]["successes"]
-    challenges = reflection["insights"]["challenges"]
-  except:
-    print("get_reflection: Error while reading AI's json response")
-    print(reflection)
 
   # Record the trade in the database
   asyncio.run(
     db.record_trade(
-      decision=decision,
-      reason=reason,
-      amount=amount,
-      reflection=reflection_content,
-      recommended_actions=recommended_actions,
-      market_trends=market_trends,
-      successes=successes,
-      challenges=challenges
+      decision=trade["decision"],
+      reason=trade["reason"],
+      amount=trade["amount"],
+      reflection=reflection["reflection"],
+      recommended_actions=reflection["recommended_actions"],
+      market_trends=reflection["market_trends"],
+      successes=reflection["insights"]["successes"],
+      challenges=reflection["insights"]["challenges"]
     )
   )
 
@@ -76,11 +60,11 @@ def main(test: False):
     return
   
   # Execute the trade
-  if decision == "BUY":
-    upbit.buy_btc(amount)
-  elif decision == "SELL":
-    upbit.sell_btc(amount)
-  elif decision == "HOLD":
+  if trade["decision"] == "BUY":
+    upbit.buy_btc(trade["amount"])
+  elif trade["decision"] == "SELL":
+    upbit.sell_btc(trade["amount"])
+  elif trade["decision"] == "HOLD":
     pass
 
 if __name__ == "__main__":
