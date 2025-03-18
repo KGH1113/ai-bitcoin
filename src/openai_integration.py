@@ -11,25 +11,6 @@ load_dotenv()
 
 client = OpenAI()
 
-def parse_response(res):
-  """
-  Parses the given response string by removing Markdown-style code block delimiters and specific keywords.
-  This function checks the input string for occurrences of the triple backtick ("```")
-  and the word "json". If found, it removes these substrings from the response.
-  
-  Parameters:
-    res (str): The input response string potentially containing Markdown formatting and keywords.
-  Returns:
-    str: The cleaned response string with Markdown code block delimiters and specified keywords removed.
-  """
-  parsed_res = res
-  if "```" in res: # Remove Markdown code block delimiters
-    parsed_res = parsed_res.replace("```", "")
-  if "json" in res: # Remove the word "json"
-    parsed_res = parsed_res.replace("json", "")
-  
-  return parsed_res
-
 def get_trade_decision(
   chart_data: str,
   past_trading_data: str,
@@ -79,7 +60,7 @@ def get_trade_decision(
 
   # Call the AI model to get a trading decision
   response = client.chat.completions.create(
-    model="o1-mini",
+    model="o3-mini",
     messages=[
       {
         "role": "user",
@@ -89,26 +70,42 @@ def get_trade_decision(
             "text": prompt
           }
         ]
-      },
-    ]
+      }
+    ],
+    response_format={
+      "type": "json_schema",
+      "json_schema": {
+        "name": "trade_decision",
+        "strict": True,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "decision": {
+              "type": "string",
+              "description": "The decision being made, BUY, SELL or HOLD"
+            },
+            "reason": {
+              "type": "string",
+              "description": "The reason for the decision."
+            },
+            "amount": {
+              "type": "number",
+              "description": "The amout(KRW) you want to buy at the moment based on the data provided."
+            }
+          },
+          "required": [
+            "decision",
+            "reason",
+            "amount"
+          ],
+          "additionalProperties": False
+        }
+      }
+    },
+    reasoning_effort="high"
   )
 
-  # Parse the AI's response
-  parsed_response = parse_response(response.choices[0].message.content)
-  try: # Try to parse the response as JSON
-    result = json.loads(parsed_response)
-  except json.decoder.JSONDecodeError: # Handle JSON parsing error
-    print("Error parsing AI's response...")
-    # Retry the decision-generating process
-    get_trade_decision(
-      chart_data=chart_data,
-      past_trading_data=past_trading_data,
-      news_data=news_data,
-      current_krw_balance=current_krw_balance,
-      current_btc_balance=current_btc_balance,
-      TRADE_FEE=trade_fee,
-    )
-  return result
+  return json.loads(response.choices[0].message.content)
 
 
 def get_reflection(
@@ -161,20 +158,63 @@ def get_reflection(
             "text": prompt
           }
         ]
-      },
-    ]
+      }
+    ],
+    response_format={
+      "type": "json_schema",
+      "json_schema": {
+        "name": "trading_assistant_analysis",
+        "strict": True,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "reflection": {
+              "type": "string",
+              "description": "A brief reflection on the recent trading decisions."
+            },
+            "insights": {
+              "type": "object",
+              "description": "Insights on what worked well and what didn't.",
+              "properties": {
+                "successes": {
+                  "type": "string",
+                  "description": "Insights on what worked well."
+                },
+                "challenges": {
+                  "type": "string",
+                  "description": "Insights on what didn't work well."
+                }
+              },
+              "required": [
+                "successes",
+                "challenges"
+              ],
+              "additionalProperties": False
+            },
+            "recommended_actions": {
+              "type": "string",
+              "description": "Suggestions for improvement in future trading decisions."
+            },
+            "market_trends": {
+              "type": "string",
+              "description": "Any patterns of trends you notice in the market data."
+            }
+          },
+          "required": [
+            "reflection",
+            "insights",
+            "recommended_actions",
+            "market_trends"
+          ],
+          "additionalProperties": False
+        }
+      }
+    },
+    temperature=1,
+    max_completion_tokens=10000,
+    top_p=1,
+    frequency_penalty=0,
+    presence_penalty=0
   )
 
-  # Parse the AI's response
-  parsed_response = parse_response(response.choices[0].message.content)
-  try: # Try to parse the response as JSON
-    result = json.loads(parsed_response)
-  except json.decoder.JSONDecodeError: # Handle JSON parsing error
-    print("Error parsing AI's response...")
-    # Retry the decision-generating process
-    get_reflection(
-      trade_data=trade_data,
-      past_trade_data=past_trade_data,
-      current_market_data=current_market_data
-    )
-  return result
+  return json.loads(response.choices[0].message.content)
