@@ -34,7 +34,7 @@ AI Bitcoin is an automated trading bot that leverages AI-driven analysis and rea
 ### Prerequisites
 
 - Python 3.8+
-- SerpAPI API key
+- NEWSAPI.org API key
 - OpenAI API key
 - Upbit API keys
 - Virtual environment (recommended)
@@ -62,19 +62,19 @@ venv\Scripts\activate     # Windows
 pip install -r requirements.txt
 ```
 
-4️⃣ **Set up environment variables:**\
+4️⃣ **Set up environment variables:**
 Create a `.env` file in the root directory and add:
 
 ```
 OPENAI_API_KEY=your_openai_key
-SERPAPI_API_KEY=your_serpapi_key
+NEWS_API_KEY=your_newsapi_key
 UPBIT_ACCESS_KEY=your_upbit_access_key
 UPBIT_SECRET_KEY=your_upbit_secret_key
 DATABASE_URL="file:path_to_your_database_file"
 TRADE_FEE=percentage_of_upbit_btc_trade_fee
 ```
 
-5️⃣ **Set up the database using Prisma:**\
+5️⃣ **Set up the database using Prisma:**
 Push the schema to your SQLite database:
 
 ```sh
