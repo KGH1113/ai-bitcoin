@@ -26,6 +26,7 @@ AI Bitcoin is an automated trading bot that leverages AI-driven analysis and rea
 - **Environment Management:** dotenv
 - **Task Handling:** AsyncIO
 - **Dashboard:** Streamlit
+- **Trade Result Notification** Puuush!
 
 ---
 
@@ -38,6 +39,7 @@ AI Bitcoin is an automated trading bot that leverages AI-driven analysis and rea
 - OpenAI API key
 - Upbit API keys
 - Virtual environment (recommended)
+- Puuush id
 
 ### Setup
 
@@ -72,6 +74,7 @@ UPBIT_ACCESS_KEY=your_upbit_access_key
 UPBIT_SECRET_KEY=your_upbit_secret_key
 DATABASE_URL="file:path_to_your_database_file"
 TRADE_FEE=percentage_of_upbit_btc_trade_fee
+PUUUSH_ID=your_puuush_id_from_puuush_app
 ```
 
 5️⃣ **Set up the database using Prisma:**
