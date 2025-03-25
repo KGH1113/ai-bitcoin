@@ -94,4 +94,4 @@ def sell_btc(krw_ammount: float):
     upbit.sell_market_order("KRW-BTC", (krw_ammount * trade_fee) / current_price)
 
 if __name__ == "__main__":
-  print(get_btc_balance())
+  print(get_krw_balance(), get_btc_balance())

@@ -11,3 +11,6 @@ venv/
 
 # Database file
 prisma/database.db
+
+# log file
+log.log

@@ -6,13 +6,14 @@ import db_integration as db
 
 import asyncio
 import json
-
 import os
+import time
+import requests
 
 from dotenv import load_dotenv
 load_dotenv()
 
-def main(test: False):
+def main(test = False):
   chart_data = data_collection.get_chart_data()
   krw_balance = upbit.get_krw_balance()
   btc_balance = upbit.get_btc_balance()
@@ -58,7 +59,7 @@ def main(test: False):
 
   if test:
     return
-  
+
   # Execute the trade
   if trade["decision"] == "BUY":
     upbit.buy_btc(trade["amount"])
@@ -67,5 +68,26 @@ def main(test: False):
   elif trade["decision"] == "HOLD":
     pass
 
+  log = "{0}: {1} {2}KRW".format(time.time(), trade["decision"], trade["amount"])
+
+  try:
+    puuush_id = os.getenv("PUUUSH_ID")
+    url = "https://puuu.sh/notify/" + puuush_id
+    payload = {
+      "title": "AI-BITCOIN trade (TEST RUN)",
+      "body": log
+    }
+    requests.post(url, json=payload)
+  except:
+    print("Error sending notification.")
+  
+  print(log)
+  print()
+  print()
+
 if __name__ == "__main__":
-  main(test=True)
+  isTest = os.getenv("TEST")
+  if isTest == "true":
+    main(test=True)
+  else:
+    main()
